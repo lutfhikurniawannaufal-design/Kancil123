@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KANCIL - Kalkulator & Latihan Cepat Matematika</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --surface-color: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary: #f59e0b;
+            --primary-hover: #d97706;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-top: 10px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        header h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form & Inputs */
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Kalkulator Instan */
+        .calc-result {
+            margin-top: 20px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .calc-result h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .visual-dots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 12px;
+            max-height: 120px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .dot {
+            width: 16px;
+            height: 16px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot.removed {
+            background: var(--accent-red);
+            text-decoration: line-through;
+            opacity: 0.4;
+        }
+
+        /* Latihan Kuis */
+        .quiz-stats {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .question-box {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .question-text {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.2rem;
+            color: var(--text-main);
+            margin-bottom: 16px;
+        }
+
+        .feedback {
+            margin-top: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            min-height: 24px;
+        }
+
+        .feedback.correct { color: var(--accent-green); }
+        .feedback.wrong { color: var(--accent-red); }
+
+        footer {
+            margin-top: 24px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>KANCIL</h1>
+            <p>Kalkulator & Latihan Cepat Matematika</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('calc')">Hitung Cepat</button>
+            <button class="tab-btn" onclick="switchTab('quiz')">Mode Latihan</button>
+        </div>
+
+        <!-- TAB 1: KALKULATOR INSTAN -->
+        <div id="calc-tab" class="tab-content active">
+            <div class="input-group">
+                <label>Angka Pertama</label>
+                <input type="number" id="num1" placeholder="Contoh: 15" value="10">
+            </div>
+            <div class="input-group">
+                <label>Operasi Hitung</label>
+                <select id="operator">
+                    <option value="add">Pertambahan (+)</option>
+                    <option value="subtract">Pengurangan (-)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Angka Kedua</label>
+                <input type="number" id="num2" placeholder="Contoh: 5" value="5">
+            </div>
+            <button class="btn" onclick="calculateInstant()">Hitung Sekarang</button>
+
+            <div class="calc-result" id="calcResultBox" style="display: none;">
+                <p id="calcDesc" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px;"></p>
+                <h3 id="calcOutput">0</h3>
+                <div class="visual-dots" id="visualDots"></div>
+            </div>
+        </div>
+
+        <!-- TAB 2: MODE LATIHAN -->
+        <div id="quiz-tab" class="tab-content">
+            <div class="quiz-stats">
+                <span>Skor: <strong id="scoreVal">0</strong></span>
+                <span>Benar: <strong id="correctVal">0</strong></span>
+                <span>Level: <strong>1-20</strong></span>
+            </div>
+
+            <div class="question-box">
+                <div class="question-text" id="quizQuestion">5 + 3 = ?</div>
+                <input type="number" id="quizAnswer" placeholder="Masukkan jawaban..." style="text-align: center; font-size: 1.2rem;">
+                <button class="btn" style="margin-top: 12px;" onclick="checkQuizAnswer()">Jawab</button>
+                <div class="feedback" id="quizFeedback"></div>
+            </div>
+            <button class="btn" style="background: var(--text-muted); font-size: 0.85rem; padding: 8px;" onclick="nextQuestion()">Soal Selanjutnya</button>
+        </div>
+    </div>
+
+    <footer>
+        Aplikasi Edukasi KANCIL • Bersih & Interaktif
+    </footer>
+
+    <script>
+        // Tab Switcher
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            if(tabName === 'calc') {
+                document.getElementById('calc-tab').classList.add('active');
+                event.currentTarget.classList.add('active');
+            } else {
+                document.getElementById('quiz-tab').classList.add('active');
+                event.currentTarget.classList.add('active');
+                if(!currentQuiz) generateQuiz();
+            }
+        }
+
+        // Kalkulator Instan Logic
+        function calculateInstant() {
+            let n1 = parseFloat(document.getElementById('num1').value) || 0;
+            let n2 = parseFloat(document.getElementById('num2').value) || 0;
+            let op = document.getElementById('operator').value;
+            let result = 0;
+            let descText = "";
+            let dotContainer = document.getElementById('visualDots');
+            dotContainer.innerHTML = '';
+
+            if(op === 'add') {
+                result = n1 + n2;
+                descText = `${n1} ditambah ${n2} adalah:`;
+                document.getElementById('calcResultBox').style.display = 'block';
+                document.getElementById('calcOutput').innerText = result;
+
+                // Visualisasi titik (maksimal 100 agar ringan)
+                let totalDots = Math.min(Math.abs(result), 100);
+                for(let i=0; i<totalDots; i++) {
+                    let d = document.createElement('div');
+                    d.className = 'dot';
+                    dotContainer.appendChild(d);
+                }
+            } else {
+                result = n1 - n2;
+                descText = `${n1} dikurangi ${n2} adalah:`;
+                document.getElementById('calcResultBox').style.display = 'block';
+                document.getElementById('calcOutput').innerText = result;
+
+                let totalDots = Math.min(Math.abs(n1), 100);
+                for(let i=0; i<totalDots; i++) {
+                    let d = document.createElement('div');
+                    d.className = 'dot';
+                    if(i >= result && result >= 0) d.classList.add('removed');
+                    dotContainer.appendChild(d);
+                }
+            }
+        }
+
+        // Quiz Logic
+        let currentQuiz = { n1: 0, n2: 0, op: '+', ans: 0 };
+        let score = 0;
+        let correctCount = 0;
+
+        function generateQuiz() {
+            let n1 = Math.floor(Math.random() * 20) + 1;
+            let n2 = Math.floor(Math.random() * 20) + 1;
+            let isAdd = Math.random() > 0.5;
+
+            if(!isAdd && n1 < n2) { // Hindari hasil minus dulu untuk latihan dasar
+                let temp = n1; n1 = n2; n2 = temp;
+            }
+
+            currentQuiz.op = isAdd ? '+' : '-';
+            currentQuiz.n1 = n1;
+            currentQuiz.n2 = n2;
+            currentQuiz.ans = isAdd ? (n1 + n2) : (n1 - n2);
+
+            document.getElementById('quizQuestion').innerText = `${n1} ${currentQuiz.op} ${n2} = ?`;
+            document.getElementById('quizAnswer').value = '';
+            document.getElementById('quizFeedback').innerText = '';
+        }
+
+        function checkQuizAnswer() {
+            let userAns = parseInt(document.getElementById('quizAnswer').value);
+            let feedbackEl = document.getElementById('quizFeedback');
+
+            if(isNaN(userAns)) {
+                feedbackEl.innerText = "Masukkan angka yang benar ya!";
+                feedbackEl.className = "feedback wrong";
+                return;
+            }
+
+            if(userAns === currentQuiz.ans) {
+                feedbackEl.innerText = "Hebat! Jawabanmu Benar 🎉";
+                feedbackEl.className = "feedback correct";
+                score += 10;
+                correctCount += 1;
+                document.getElementById('scoreVal').innerText = score;
+                document.getElementById('correctVal').innerText = correctCount;
+                setTimeout(generateQuiz, 1200);
+            } else {
+                feedbackEl.innerText = `Kurang tepat, yang benar adalah ${currentQuiz.ans}. Coba lagi!`;
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+
+        // Jalankan kalkulator default saat pertama buka
+        window.onload = function() {
+            calculateInstant();
+        }
+    </script>
+</body>
+</html>
